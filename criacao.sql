@@ -1,0 +1,63 @@
+CREATE SCHEMA IF NOT EXISTS loja;
+USE loja;
+
+CREATE TABLE Cliente (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE
+);
+
+CREATE TABLE Cliente_telefone (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cliente INT NOT NULL,
+    Numero VARCHAR(20) NOT NULL,
+    Tipo VARCHAR(20),
+
+    FOREIGN KEY (id_Cliente) REFERENCES Cliente(ID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Editora (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    CNPJ VARCHAR(18) UNIQUE NOT NULL,
+    Email VARCHAR(100)
+);
+
+CREATE TABLE Jogo (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(100) NOT NULL,
+    Plataforma VARCHAR(50) NOT NULL,
+    Preco DECIMAL(10,2) NOT NULL,
+    Estoque INT NOT NULL,
+    id_Editora INT NOT NULL,
+
+    FOREIGN KEY (id_Editora) REFERENCES Editora(ID)
+        ON DELETE RESTRICT
+);
+
+CREATE TABLE Pedido (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cliente INT NOT NULL,
+    Data DATE NOT NULL,
+    Valor DECIMAL(10,2) NOT NULL,
+
+    FOREIGN KEY (id_Cliente) REFERENCES Cliente(ID)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Pedido_Jogo (
+    id_Pedido INT NOT NULL,
+    id_Jogo INT NOT NULL,
+    Quantidade INT NOT NULL,
+
+    PRIMARY KEY (id_Pedido, id_Jogo),
+
+    FOREIGN KEY (id_Pedido) REFERENCES Pedido(ID)
+        ON DELETE CASCADE,
+    FOREIGN KEY (id_Jogo) REFERENCES Jogo(ID)
+        ON DELETE RESTRICT
+);
+
+
+
